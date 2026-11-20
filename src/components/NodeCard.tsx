@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { ArrowDown, ArrowUp, CalendarClock } from "lucide-react"
+import { ArrowDown, ArrowUp, CalendarClock, Cpu, HardDrive, MemoryStick } from "lucide-react"
 
 import { CountryLabel, ExpiryText, LatencyPanel, PriceText, StatusPill } from "@/components/Bits"
 import { Meter } from "@/components/Meter"
@@ -8,6 +8,16 @@ import type { Latency, Node } from "@/lib/api"
 import { osName, percent, rate } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { deployed, statusOf } from "@/lib/view"
+
+// 容量换算直接引用哪吒 V0 theme-default 的 getK2Gb
+// （naiba/nezha@v0.19.16 resource/template/theme-default/home.html:495）：
+// ≥1GiB 时向上取整到 GB，不足 1GiB 时换算成 MB
+function gb(bytes: number): string {
+  if (!bytes) return "—"
+  const gib = bytes / 1024 ** 3
+  if (gib >= 1) return `${Math.ceil(Number(gib.toFixed(2)))}GB`
+  return `${Math.ceil(Number((gib * 1024).toFixed(2)))}MB`
+}
 
 function NodeCardBase({ node, latency, onOpen }: { node: Node; latency?: Latency; onOpen: () => void }) {
   const m = node.metrics
@@ -55,6 +65,24 @@ function NodeCardBase({ node, latency, onOpen }: { node: Node; latency?: Latency
             <Meter label="CPU" pct={m ? m.cpu : null} />
             <Meter label="RAM" pct={m ? percent(m.mem_used, m.mem_total) : null} />
             <Meter label="Disk" pct={m ? percent(m.disk_used, m.disk_total) : null} />
+          </div>
+
+          {/* 硬件配置行，哪吒 V0 的 Asset 那一行：图标颜色也沿用哪吒的
+              CPU #4a86e8 蓝、内存 #00ac0d 绿、硬盘 #e41e10 红 */}
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+            <span className="shrink-0 text-muted-foreground">Asset</span>
+            <span className="inline-flex items-center gap-1">
+              <Cpu className="size-3.5 shrink-0" style={{ color: "#4a86e8" }} />
+              <span className="tnum font-medium">{node.cpu_cores ? `${node.cpu_cores} Cores` : "—"}</span>
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <MemoryStick className="size-3.5 shrink-0" style={{ color: "#00ac0d" }} />
+              <span className="tnum font-medium">{gb(node.mem_total)}</span>
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <HardDrive className="size-3.5 shrink-0" style={{ color: "#e41e10" }} />
+              <span className="tnum font-medium">{gb(node.disk_total)}</span>
+            </span>
           </div>
 
           <div className="mt-4">
