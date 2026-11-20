@@ -110,7 +110,7 @@ export function Summary({
   return (
     /* 和下方节点卡片共用同一套列模板：概览牌各占一个节点卡宽度，
        地图占两个，横向边缘逐列对齐 */
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <div className="grid gap-4.5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       <div className="grid grid-cols-2 gap-3 sm:col-span-2 xl:col-span-2 2xl:col-span-2">
         <Tile icon={Database} label="本月流量" tone="primary">
           <div className="tnum text-xl font-semibold">
