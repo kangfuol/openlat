@@ -1,27 +1,17 @@
 import { memo } from "react"
-import {
-  ArrowDown,
-  ArrowDownUp,
-  ArrowUp,
-  CalendarClock,
-  Cpu,
-  HardDrive,
-  MemoryStick,
-} from "lucide-react"
+import { ArrowDown, ArrowUp, CalendarClock } from "lucide-react"
 
 import { CountryLabel, ExpiryText, LatencyPanel, PriceText, StatusPill } from "@/components/Bits"
 import { Meter } from "@/components/Meter"
 import { Card } from "@/components/ui/card"
 import type { Latency, Node } from "@/lib/api"
-import { bytes, FOREVER, osName, pair, percent, rate } from "@/lib/format"
+import { osName, percent, rate } from "@/lib/format"
 import { cn } from "@/lib/utils"
-import { deployed, monthUsage, statusOf } from "@/lib/view"
+import { deployed, statusOf } from "@/lib/view"
 
 function NodeCardBase({ node, latency, onOpen }: { node: Node; latency?: Latency; onOpen: () => void }) {
   const m = node.metrics
   const status = statusOf(node)
-  const used = monthUsage(node)
-  const trafficPct = node.traffic_limit > 0 ? percent(used, node.traffic_limit) : null
 
   return (
     <Card
@@ -59,36 +49,12 @@ function NodeCardBase({ node, latency, onOpen }: { node: Node; latency?: Latency
 
       {deployed(node) ? (
         <>
-          <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4">
-            <Meter
-              icon={Cpu}
-              tone="cpu"
-              label={`CPU${node.cpu_cores ? ` ${node.cpu_cores} 核` : ""}`}
-              pct={m ? m.cpu : null}
-              foot={m ? m.load.map((n) => n.toFixed(2)).join(" ") : "—"}
-            />
-            <Meter
-              icon={MemoryStick}
-              tone="mem"
-              label="内存"
-              pct={m ? percent(m.mem_used, m.mem_total) : null}
-              foot={m ? pair(m.mem_used, m.mem_total) : bytes(node.mem_total)}
-            />
-            <Meter
-              icon={HardDrive}
-              tone="disk"
-              label="硬盘"
-              pct={m ? percent(m.disk_used, m.disk_total) : null}
-              foot={m ? pair(m.disk_used, m.disk_total) : bytes(node.disk_total)}
-            />
-            <Meter
-              icon={ArrowDownUp}
-              tone="net"
-              label="流量"
-              pct={trafficPct}
-              empty={FOREVER}
-              foot={node.traffic_limit > 0 ? pair(used, node.traffic_limit) : `${bytes(used)} / ${FOREVER}`}
-            />
+          {/* 资源条改成哪吒 V0 样式：只留 CPU / RAM / Disk 三行，
+              Swap 和流量都不要；条的样子见 src/components/Meter.tsx */}
+          <div className="mt-4 space-y-2">
+            <Meter label="CPU" pct={m ? m.cpu : null} />
+            <Meter label="RAM" pct={m ? percent(m.mem_used, m.mem_total) : null} />
+            <Meter label="Disk" pct={m ? percent(m.disk_used, m.disk_total) : null} />
           </div>
 
           <div className="mt-4">

@@ -1,39 +1,37 @@
-import type { ReactNode } from "react"
-
-import { BAR_TONE, type BarTone, type IconType } from "@/components/Bits"
 import { cn } from "@/lib/utils"
 
 type Props = {
-  label: ReactNode
-  icon?: IconType
+  label: string
   pct: number | null
-  foot: ReactNode
-  empty?: ReactNode
-  tone?: BarTone
   className?: string
 }
 
-export function Meter({ label, icon: Icon, pct, foot, empty = "—", tone = "cpu", className }: Props) {
+// 配色直接引用哪吒 V0 theme-default 的 formatPercent
+// （naiba/nezha@v0.19.16 resource/template/theme-default/home.html:418）：
+// <51% #0a94f2 蓝、51–80% orange、≥81% crimson；无数据 slategray
+function barColor(pct: number | null): string {
+  if (pct === null) return "slategray"
+  if (pct < 51) return "#0a94f2"
+  if (pct < 81) return "orange"
+  return "crimson"
+}
+
+// 结构也是哪吒 V0 那套：左边 label 列 + 右边一条整宽进度条，
+// 百分比白字写在蓝色填充里（.ui.progress > .bar > small）。
+// 轨道沿用本主题现成的 neu-inset，深浅色自动适配。
+export function Meter({ label, pct, className }: Props) {
   const filled = pct === null ? 0 : Math.min(100, Math.max(0, pct))
-  const danger = pct !== null && filled >= 90
   return (
-    <div className={cn("min-w-0", className)}>
-      <div className="flex items-baseline justify-between gap-2">
-        <span className="inline-flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
-          {Icon && <Icon className="size-3 shrink-0" />}
-          <span className="truncate">{label}</span>
-        </span>
-        <span className={cn("tnum text-xs font-semibold", danger ? "text-destructive" : "text-foreground/85")}>
-          {pct === null ? empty : `${filled < 10 ? filled.toFixed(1) : filled.toFixed(0)}%`}
-        </span>
-      </div>
-      <div className="neu-inset mt-1.5 h-1.5 w-full overflow-hidden rounded-full">
+    <div className={cn("flex items-center gap-3", className)}>
+      <span className="w-10 shrink-0 text-sm text-muted-foreground">{label}</span>
+      <div className="neu-inset h-5 min-w-0 flex-1 overflow-hidden rounded">
         <div
-          className={cn("h-full rounded-full transition-[width] duration-700", danger ? "bar-danger" : BAR_TONE[tone])}
-          style={{ width: `${filled}%` }}
-        />
+          className="flex h-full items-center justify-center rounded text-white transition-[width] duration-300"
+          style={{ width: `${filled}%`, minWidth: "2em", backgroundColor: barColor(pct) }}
+        >
+          <span className="text-[11px] font-semibold">{pct === null ? "—" : `${Math.floor(filled)}%`}</span>
+        </div>
       </div>
-      <div className="tnum mt-1.5 truncate text-xs text-muted-foreground">{foot}</div>
     </div>
   )
 }
