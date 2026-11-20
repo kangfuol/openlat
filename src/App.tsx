@@ -134,7 +134,7 @@ export default function App() {
   return (
     <div className="min-h-svh">
       <header className="sticky top-0 z-20 border-b border-border/70 bg-background/75 backdrop-blur-[6px]">
-        <div className="mx-auto flex max-w-[1500px] items-center gap-3 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-[1840px] items-center gap-3 px-4 py-3 sm:px-6">
           <button className="flex items-center gap-2.5 transition-opacity hover:opacity-80" onClick={() => go(null)}>
             <span className="grid size-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-info text-primary-foreground shadow-sm">
               <Activity className="size-4" />
@@ -165,7 +165,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1500px] space-y-4 px-4 py-5 sm:px-6">
+      <main className="mx-auto max-w-[1840px] space-y-4 px-4 py-5 sm:px-6">
         {error && (
           <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
             {error}
