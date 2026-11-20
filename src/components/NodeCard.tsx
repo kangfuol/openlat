@@ -68,21 +68,25 @@ function NodeCardBase({ node, latency, onOpen }: { node: Node; latency?: Latency
           </div>
 
           {/* 硬件配置行，哪吒 V0 的 Asset 那一行：图标颜色也沿用哪吒的
-              CPU #4a86e8 蓝、内存 #00ac0d 绿、硬盘 #e41e10 红 */}
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-            <span className="shrink-0 text-muted-foreground">Asset</span>
-            <span className="inline-flex items-center gap-1">
-              <Cpu className="size-3.5 shrink-0" style={{ color: "#4a86e8" }} />
-              <span className="tnum font-medium">{node.cpu_cores ? `${node.cpu_cores} Cores` : "—"}</span>
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <MemoryStick className="size-3.5 shrink-0" style={{ color: "#00ac0d" }} />
-              <span className="tnum font-medium">{gb(node.mem_total)}</span>
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <HardDrive className="size-3.5 shrink-0" style={{ color: "#e41e10" }} />
-              <span className="tnum font-medium">{gb(node.disk_total)}</span>
-            </span>
+              CPU #4a86e8 蓝、内存 #00ac0d 绿、硬盘 #e41e10 红；
+              结构和上面三条 Meter 一样（w-10 的 label 列 + 右边内容），
+              所以 Asset 和 CPU/RAM/Disk 对齐，第一个 CPU 图标和条子左端对齐 */}
+          <div className="mt-2.5 flex items-center gap-3 text-sm">
+            <span className="w-10 shrink-0 text-muted-foreground">Asset</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="inline-flex items-center gap-1">
+                <Cpu className="size-4 shrink-0" style={{ color: "#4a86e8" }} />
+                <span className="tnum font-medium">{node.cpu_cores ? `${node.cpu_cores} Cores` : "—"}</span>
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <MemoryStick className="size-4 shrink-0" style={{ color: "#00ac0d" }} />
+                <span className="tnum font-medium">{gb(node.mem_total)}</span>
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <HardDrive className="size-4 shrink-0" style={{ color: "#e41e10" }} />
+                <span className="tnum font-medium">{gb(node.disk_total)}</span>
+              </span>
+            </div>
           </div>
 
           <div className="mt-4">
