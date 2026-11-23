@@ -472,6 +472,17 @@
      旧浏览器同样会丢掉整条 backdrop-filter，顶栏就只剩半透明底色、没有毛玻璃。
      补一条普通写法，新浏览器效果一样 */
   .backdrop-blur-\[6px\] { backdrop-filter: blur(6px); }
+
+  /* 旧浏览器（Win7 Edge 109 等）兜底：Tailwind v4 的渐变默认用 oklab 插值
+     （to bottom right in oklab），Chrome 111 以下不认，整条 background-image
+     在解析阶段就被丢弃，顶栏 logo 的渐变底色就没了，白图标在白底上也看不见，
+     只剩一个白圆角方块。只在不支持 oklab 插值的浏览器里补一条普通渐变；
+     新浏览器里 @supports 条件不成立、这条规则不生效，显示和原来完全一样 */
+  @supports not (background-image: linear-gradient(to bottom right in oklab, red, blue)) {
+    .bg-gradient-to-br {
+      background-image: linear-gradient(to bottom right, var(--tw-gradient-from), var(--tw-gradient-to));
+    }
+  }
 }
 
 /* 在线圆点的呼吸光晕放在伪元素上，只动 transform / opacity，
