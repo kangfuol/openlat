@@ -39,13 +39,17 @@
   --grad-disk: linear-gradient(90deg, oklch(0.65 0.16 160), oklch(0.75 0.16 130));
   --grad-net: linear-gradient(90deg, oklch(0.72 0.16 75), oklch(0.68 0.18 45));
   --grad-danger: linear-gradient(90deg, oklch(0.6 0.22 25), oklch(0.68 0.2 50));
-  /* 热力色阶：24 小时色块逐档取样，低饱和但小尺寸下档位分明 */
-  --heat-ok: oklch(0.8 0.12 165);
-  --heat-mild: oklch(0.84 0.13 125);
-  --heat-warn: oklch(0.86 0.14 95);
-  --heat-hot: oklch(0.79 0.14 55);
-  --heat-bad: oklch(0.7 0.16 20);
-  --heat-muted: oklch(0.915 0.012 275);
+  /* 热力色阶：24 小时色块逐档取样，低饱和但小尺寸下档位分明。
+     注意这里故意用十六进制而不是 oklch：Win7 Edge 109 等旧浏览器不认 oklch，
+     var() 解析出 oklch 会让整条 background-color 在计算值阶段失效变透明，
+     连写在前面的十六进制兜底都会被它盖掉（2026.11.23 试过，先写底色再写 var 的办法无效）；
+     变量本身写成十六进制，新旧浏览器都能显示，渐变那行旧浏览器丢弃也不影响底色 */
+  --heat-ok: #69d6aa;
+  --heat-mild: #b7d978;
+  --heat-warn: #eed059;
+  --heat-hot: #ffa15c;
+  --heat-bad: #f17074;
+  --heat-muted: #e0e2eb;
   --sh-neu: 9px 9px 22px oklch(0.52 0.03 275 / 0.16), -7px -7px 18px oklch(1 0 0 / 0.9);
   --sh-neu-sm: 4px 4px 10px oklch(0.52 0.03 275 / 0.13), -3px -3px 8px oklch(1 0 0 / 0.85);
   --sh-inset: inset 2px 2px 5px oklch(0.52 0.03 275 / 0.15), inset -2px -2px 5px oklch(1 0 0 / 0.8);
@@ -84,13 +88,13 @@
   --grad-disk: linear-gradient(90deg, oklch(0.74 0.15 160), oklch(0.82 0.15 130));
   --grad-net: linear-gradient(90deg, oklch(0.82 0.15 75), oklch(0.78 0.17 45));
   --grad-danger: linear-gradient(90deg, oklch(0.68 0.2 25), oklch(0.76 0.18 50));
-  /* 热力色阶：与浅色同一套色相递进，靠彩度承担严重度 */
-  --heat-ok: oklch(0.63 0.12 165);
-  --heat-mild: oklch(0.68 0.12 125);
-  --heat-warn: oklch(0.72 0.13 95);
-  --heat-hot: oklch(0.67 0.13 55);
-  --heat-bad: oklch(0.62 0.15 20);
-  --heat-muted: oklch(0.35 0.018 275);
+  /* 热力色阶：与浅色同一套色相递进，靠彩度承担严重度（同上，用十六进制保旧浏览器） */
+  --heat-ok: #29a077;
+  --heat-mild: #87a54d;
+  --heat-warn: #bea333;
+  --heat-hot: #d17d3e;
+  --heat-bad: #d15b60;
+  --heat-muted: #383a44;
   --sh-neu: 10px 10px 24px oklch(0.09 0.015 275 / 0.6), -8px -8px 20px oklch(0.52 0.03 275 / 0.14);
   --sh-neu-sm: 4px 4px 10px oklch(0.09 0.015 275 / 0.55), -3px -3px 8px oklch(0.52 0.03 275 / 0.12);
   --sh-inset: inset 2px 2px 6px oklch(0.09 0.015 275 / 0.55), inset -2px -2px 6px oklch(0.52 0.03 275 / 0.1);
@@ -213,30 +217,22 @@
     filter: saturate(1.08) brightness(1.03);
   }
   .heat-ok {
-    /* 旧浏览器（Win7 Edge 109 等）不支持 oklch 和 color-mix：先给十六进制底色，
-       再写 var 和渐变——旧浏览器会丢弃不认识的那两行、只留底色，色块就能显示；
-       新浏览器按原来的 oklch 渐变渲染，不变样 */
-    background-color: #69d6aa;
     background-color: var(--heat-ok);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-ok) 82%, white), var(--heat-ok));
   }
   .heat-mild {
-    background-color: #b7d978;
     background-color: var(--heat-mild);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-mild) 82%, white), var(--heat-mild));
   }
   .heat-warn {
-    background-color: #eed059;
     background-color: var(--heat-warn);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-warn) 82%, white), var(--heat-warn));
   }
   .heat-hot {
-    background-color: #ffa15c;
     background-color: var(--heat-hot);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-hot) 82%, white), var(--heat-hot));
   }
   .heat-bad {
-    background-color: #f17074;
     background-color: var(--heat-bad);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-bad) 82%, white), var(--heat-bad));
   }
@@ -245,7 +241,6 @@
     box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.35);
   }
   .heat-muted {
-    background-color: #e0e2eb;
     background-color: var(--heat-muted);
     box-shadow: inset 0 1px 3px oklch(0.35 0.03 275 / 0.18);
   }
