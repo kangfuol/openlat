@@ -459,6 +459,19 @@
   .dark .bg-accent\/70 { background-color: rgba(38, 44, 71, 0.7); }
   .dark .bg-accent\/60 { background-color: rgba(38, 44, 71, 0.6); }
   .dark .bg-muted-foreground\/40 { background-color: rgba(159, 164, 184, 0.4); }
+
+  /* 旧浏览器（Win7 Edge 109 等）兜底：Tailwind v4 的 blur 工具用 var() 空 fallback
+     拼 filter（filter: var(--tw-blur,) var(--tw-brightness,) …），旧浏览器整条声明
+     被丢弃，卡片右上角的装饰光晕就没了模糊、变成一个硬边的圆盘（2026.11.23.2
+     截图上旧浏览器那圈很淡的绿圆就是它）。这里补一条最普通的 filter 写法，
+     老浏览器认得；新浏览器里它和原来拼出来的 blur(64px) 效果完全一样，
+     且 blur-3xl 只用在这三个装饰光晕上、没和其他 filter 工具叠用，不会互相干扰 */
+  .blur-3xl { filter: blur(64px); }
+
+  /* 同上：顶栏的 backdrop-blur-[6px] 也是 var() 空 fallback 拼出来的，
+     旧浏览器同样会丢掉整条 backdrop-filter，顶栏就只剩半透明底色、没有毛玻璃。
+     补一条普通写法，新浏览器效果一样 */
+  .backdrop-blur-\[6px\] { backdrop-filter: blur(6px); }
 }
 
 /* 在线圆点的呼吸光晕放在伪元素上，只动 transform / opacity，
