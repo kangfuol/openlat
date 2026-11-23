@@ -213,22 +213,30 @@
     filter: saturate(1.08) brightness(1.03);
   }
   .heat-ok {
+    /* 旧浏览器（Win7 Edge 109 等）不支持 oklch 和 color-mix：先给十六进制底色，
+       再写 var 和渐变——旧浏览器会丢弃不认识的那两行、只留底色，色块就能显示；
+       新浏览器按原来的 oklch 渐变渲染，不变样 */
+    background-color: #69d6aa;
     background-color: var(--heat-ok);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-ok) 82%, white), var(--heat-ok));
   }
   .heat-mild {
+    background-color: #b7d978;
     background-color: var(--heat-mild);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-mild) 82%, white), var(--heat-mild));
   }
   .heat-warn {
+    background-color: #eed059;
     background-color: var(--heat-warn);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-warn) 82%, white), var(--heat-warn));
   }
   .heat-hot {
+    background-color: #ffa15c;
     background-color: var(--heat-hot);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-hot) 82%, white), var(--heat-hot));
   }
   .heat-bad {
+    background-color: #f17074;
     background-color: var(--heat-bad);
     background-image: linear-gradient(165deg, color-mix(in oklab, var(--heat-bad) 82%, white), var(--heat-bad));
   }
@@ -237,6 +245,7 @@
     box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.35);
   }
   .heat-muted {
+    background-color: #e0e2eb;
     background-color: var(--heat-muted);
     box-shadow: inset 0 1px 3px oklch(0.35 0.03 275 / 0.18);
   }
